@@ -1,0 +1,45 @@
+{% extends "rest_framework/base.html" %}
+{% load url from future %}
+{% load staticfiles %}
+{% load rest_framework %}
+{% load CRUDFilters %}
+
+{% block body %}
+<body class="container">
+  <div class="container-fluid" style="margin-top: 30px">
+    <div class="row-fluid">
+      <div class="well" style="width: 320px; margin-left: auto; margin-right: auto">
+        <div class="row-fluid">
+          <div>
+            {% block branding %}<h3 style="margin: 0 0 20px;">CRUDFilters</h3>{% endblock %}
+          </div>
+        </div><!-- /row fluid -->
+
+        <div> <!-- class="row-fluid" -->
+          <div>
+            <form action="{% url 'CRUDFilters:choose_filters' %}" role="form" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ next }}" />
+              <br>
+                  <label for="id_username">Filters:</label><br>
+                  TODO: make these checkboxes, to allow for multiple filters<br><br>
+                  {% print_filters request %}
+                  <br>
+
+              {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                  <div class="well well-small text-error" style="border: none">{{ error }}</div>
+                {% endfor %}
+              {% endif %}
+
+              <div class="form-actions-no-box">
+                <input type="submit" name="submit" value="Continue" class="btn btn-primary form-control" id="submit-id-submit">
+              </div>
+            </form>
+          </div>
+        </div><!-- /.row-fluid -->
+      </div><!--/.well-->
+    </div><!-- /.row-fluid -->
+  </div><!-- /.container-fluid -->
+</body>
+{% endblock %}
