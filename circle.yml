@@ -13,5 +13,5 @@ dependencies:
 test:
   override:
   - pip freeze
-  - python CRUDFilter/manage.py test
+  - python CRUDFilters/manage.py test
 
