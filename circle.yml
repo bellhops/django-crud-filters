@@ -1,3 +1,10 @@
 machine:
   python:
     version: 3.4.1
+
+test:
+  override:
+  - pip freeze
+  - python kinetic/manage.py flake8
+  - python kinetic/manage.py test --settings=CRUDFilters.CRUDFilters.settings
+
