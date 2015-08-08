@@ -2,9 +2,16 @@ machine:
   python:
     version: 3.4.1
 
+dependencies:
+  cache_directories:
+  - "/home/ubuntu/nvm"
+
+  override:
+    - pip install --exists-action w -r requirements.txt
+
+
 test:
   override:
   - pip freeze
-  - python kinetic/manage.py flake8
-  - python kinetic/manage.py test --settings=CRUDFilters.CRUDFilters.settings
+  - python CRUDFilter/manage.py test
 
