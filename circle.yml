@@ -2,7 +2,7 @@ machine:
   python:
     version: 3.4.1
   environment:
-    PATH: /home/ubuntu/django-crud-filters:/home/ubuntu/django-crud-filters/CRUDFilters:/home/ubuntu/django-crud-filters/CRUDFilters/CRUDFilters:$PATH
+    PATH: /home/ubuntu/django-crud-filters:/home/ubuntu/django-crud-filters/CRUDFilters:/home/ubuntu/django-crud-filters/CRUDFilters/CRUDFilters:/home/ubuntu/django-crud-filters/CRUDFilters/CRUDFilters/settings.py:$PATH
 
 dependencies:
   cache_directories:
