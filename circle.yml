@@ -15,4 +15,4 @@ dependencies:
 test:
   override:
   - pip freeze
-  - python testproject/manage.py test
+  - python testproject/manage.py test testproject.testapp.tests
