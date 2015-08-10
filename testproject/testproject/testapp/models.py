@@ -23,4 +23,4 @@ class TestClass(CRUDFilterModel):
     objects = TestManager
 
     class Meta:
-        app_label = 'tests'
+        app_label = 'testapp'
