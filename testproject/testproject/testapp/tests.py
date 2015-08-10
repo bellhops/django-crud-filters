@@ -20,12 +20,10 @@ from django.conf import settings
 from django.test import TransactionTestCase
 from django.core.management import call_command
 
-from ..models import CRUDFilterModel
-from ..managers import CRUDManager, CRUDException
+from CRUDFilters.models import CRUDFilterModel
+from CRUDFilters.managers import CRUDManager, CRUDException
 from .models import TestClass
 from .views import TestClassViewset
-
-settings.configure()
 
 test_roles = settings.CRUD_ALL_ROLES
 

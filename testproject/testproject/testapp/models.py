@@ -1,6 +1,6 @@
 from django.db import models
 
-from ..models import CRUDFilterModel
+from CRUDFilters.models import CRUDFilterModel
 from .managers import TestManager
 
 

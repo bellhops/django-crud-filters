@@ -50,6 +50,8 @@ coverage.xml
 
 # Django stuff:
 *.log
+.venv
+.venv/
 
 # Sphinx documentation
 docs/_build/

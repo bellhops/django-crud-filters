@@ -9,11 +9,10 @@ dependencies:
   - "/home/ubuntu/nvm"
 
   override:
+    - python setup.py install
     - pip install --exists-action w -r requirements.txt
-
 
 test:
   override:
   - pip freeze
-  - python CRUDFilters/manage.py test
-
+  - python testproject/manage.py test

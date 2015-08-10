@@ -15,12 +15,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
-
-PROJECT_ROOT = PROJECT_PATH
-
-# Locations
-PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -44,8 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
-    'CRUDFilters',
-    'CRUDFilters.tests'
+    'testproject.testapp',
 )
 
 MIDDLEWARE_CLASSES = (
