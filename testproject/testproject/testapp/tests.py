@@ -4,7 +4,6 @@ import random
 from PIL import Image
 from rest_framework_expiring_authtoken.models import ExpiringToken
 import tempfile
-from unittest import skip
 
 from rest_framework import HTTP_HEADER_ENCODING
 from rest_framework.test import APIClient
@@ -52,7 +51,6 @@ class CRUDFilterTestCase(TransactionTestCase):
         CRUDManager.set_authorization_function(default_auth_function)
 
 
-@skip("Interfering with other tests")
 class CRUDFilterModelTests(CRUDFilterTestCase):
 
     def auth_function_returns_true(self, user, role):
@@ -88,7 +86,6 @@ class CRUDFilterModelTests(CRUDFilterTestCase):
             TestClass.role_can_perform_operation_with_filter('role', 'K', 'filter')
 
 
-@skip("Interfering with other tests")
 class CRUDFilterModelViewSetTests(CRUDFilterTestCase):
 
     def test_check_request_body_for_id_json(self):
@@ -143,7 +140,6 @@ class CRUDFilterModelViewSetTests(CRUDFilterTestCase):
         self.assertEquals(view.obj_id, "1")
 
 
-@skip("Interfering with other tests")
 class CRUDManagerTests(CRUDFilterTestCase):
 
     model = CRUDFilterModel()
@@ -230,7 +226,6 @@ class CRUDManagerTests(CRUDFilterTestCase):
         self.assertEqual(CRUDManager.filter_set[str(TestClass)]['allowed_methods'][test_roles[0]]['filter_string'], 'CR')
 
 
-@skip("Interfering with other tests")
 class CRUDFilterIntegrationTestClass(CRUDFilterTestCase):
     """
     This test class checks for permissions on models.
@@ -431,7 +426,6 @@ class CRUDFilterIntegrationTestClass(CRUDFilterTestCase):
         return int(status_code) >= group['start'] and int(status_code) <= group['end']
 
 
-@skip("Interfering with other tests")
 class ExampleIntegrationTests(CRUDFilterIntegrationTestClass):
     def setUp(self):
         username = "user@name.com"
