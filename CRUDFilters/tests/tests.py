@@ -25,7 +25,7 @@ from ..managers import CRUDManager, CRUDException
 from .models import TestClass
 from .views import TestClassViewset
 
-settings.configure()
+# settings.configure()
 
 test_roles = settings.CRUD_ALL_ROLES
 
