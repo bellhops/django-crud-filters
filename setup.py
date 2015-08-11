@@ -8,7 +8,7 @@ setup(
     name='crud_filters',
     # packages=['crud_filters'],
     packages=find_packages(exclude=['tests*']),
-    version='0.1.3',
+    version='0.1.4',
     description='django-crud-filters works with django-restframework to provide easily configurable role-based filtering for API endpoints.',
     author='Bellhops',
     author_email='tech@getbellhops.com',
