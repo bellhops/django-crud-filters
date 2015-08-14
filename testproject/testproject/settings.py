@@ -52,7 +52,7 @@ MIDDLEWARE_CLASSES = (
     'CRUDFilters.views.CRUDFilterModelViewSet',
 )
 
-ROOT_URLCONF = 'CRUDFilters.tests.urls'
+ROOT_URLCONF = 'testapp.urls'
 
 TEMPLATES = [
     {
@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'CRUDFilters.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 REST_FRAMEWORK = {
