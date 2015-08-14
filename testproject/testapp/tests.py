@@ -321,8 +321,6 @@ class CRUDFilterIntegrationTestClass(CRUDFilterTestCase):
                             content_type=content_type,
                             **headers
                         )
-                        if not self.check_status_code_in_group(response.status_code, expected_status_code_group):
-                            import ipdb; ipdb.set_trace()
                         self.assertTrue(self.check_status_code_in_group(response.status_code, expected_status_code_group))
                         # logic check here
                         write_operation_performed = True
