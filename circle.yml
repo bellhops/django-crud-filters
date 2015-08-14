@@ -15,5 +15,4 @@ dependencies:
 test:
   override:
   - pip freeze
-  - python testproject/manage.py migrate testapp
   - python testproject/manage.py test testapp
