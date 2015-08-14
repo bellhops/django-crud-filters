@@ -1,6 +1,6 @@
+import logging
 import base64
 import json
-import logging
 import re
 
 from django.core.urlresolvers import resolve
@@ -26,6 +26,8 @@ from .serializers import AbstractModelSerializer
 from .forms import RoleForm
 from .managers import CRUDManager
 from django.contrib.sites.shortcuts import get_current_site
+
+logger = logging.getLogger('crud_filters')
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -134,6 +136,7 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
                     self.user = authenticate(username=uname, password=passwd)
                     if self.user is None:
                         # Credentials were provided, but they were invalid (bad username/password).
+                        logger.exception("User with username '{}' attempted to login with basic auth, but their credentials were invalid. ".format(uname))
                         raise CRUDException("Bad credentials", 401)
                 elif auth[0].lower() == "token":
                     try:
@@ -142,12 +145,14 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
                         if token_obj.expired():
                             self.user = None
                             # Credentials were provided, but they were invalid (expired token).
+                            logger.exception("Attempted login with expired token.")
                             raise CRUDException("Token has expired", 401)
                         else:
                             self.user = token_obj.user
                     except ExpiringToken.DoesNotExist:
                         self.user = None
                         # Credentials were provided, but they were invalid (bad or expired token).
+                        logger.exception("User attempted to login with token auth, but their credentials were invalid. ")
                         raise CRUDException("Bad credentials", 401)
         elif '_auth_user_id' in self.request.session.keys():
             self.user = User.objects.get(id=self.request.session['_auth_user_id'])
@@ -193,6 +198,7 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
         if self.request.crud_operation in ['U', 'D']:
             # Check that the object in question is in the queryset
             if not self.check_object_for_permissions(self.request):
+                logger.exception("Operation {} cannot be performed on requested object".format(self.request.crud_operation))
                 raise CRUDException("Cannot perform this operation on this object.", status_code=403)
 
     # For the time being, this only works with token and basic auth.
@@ -240,9 +246,11 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
                                 self.request.crud_role = key[3:].lower()
 
         if self.crud_model is None:
+            logger.exception("CRUDFilterModel not specified on CRUDFilterModelViewSet {}".format(self))
             raise CRUDException("You must specify a CRUDFilterModel for this CRUDFilterModelViewSet", 500)
             return
         elif not issubclass(self.crud_model, CRUDFilterModel):
+            logger.exception("CRUDFilterModel specified on CRUDFilterModelViewSet {} does not extend the CRUDFilter model".format(self))
             raise CRUDException("crud_model for CRUDFilterModelViewSet must extend CRUDFilterModel", 500)
         method = self.request.method
         if method == 'POST':
@@ -398,17 +406,21 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
             except AttributeError:
                 return False
             except KeyError:
+                logger.exception("Missing lookup field {} on view {} ".format(self.lookup_field, self))
                 raise CRUDException("Missing {lookup_field}".format(lookup_field=self.lookup_field), 400)
             except ValueError:
+                logger.exception("CRUDFilters received improper json.")
                 raise CRUDException("Improper json", 400)
         try:
             if id is None:
+                logger.exception("Missing lookup field {} on view {} ".format(self.lookup_field, self))
                 raise CRUDException("Missing {lookup_field}".format(lookup_field=self.lookup_field), 400)
 
             self.obj_id = id
 
             return self.obj_id
         except KeyError:
+            logger.exception("Update Operations must include {} in the request body.".format(self.lookup_field))
             raise CRUDException("Update operations must include " + self.lookup_field + " in the request body.", status_code=400)
 
     def id_from_json(self, str_data):
@@ -441,6 +453,14 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
             self.obj_id = request.resolver_match.kwargs[self.lookup_field]
             return self.obj_id
         except KeyError:
+            logger.exception("Malformed request at URL {url}. CRUD role ({role}), filters ({filters}), operation ({operation}). Desired role {desired_role}. User {user}.".format(
+                url=request.path,
+                role=request.crud_role,
+                filters=str(request.crud_filters),
+                operation=request.crud_operation,
+                desired_role=request.META.get('HTTP_CRUD_ROLE', '(none)'),
+                user=str(request.user)
+            ))
             raise CRUDException(request.method + " operations on this endpoint must include /" + self.lookup_field + "/ in the request URL.", status_code=400)
 
     def create(self, request, *args, **kwargs):

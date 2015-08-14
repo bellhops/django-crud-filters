@@ -128,6 +128,28 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.NullHandler',
+        },
+    },
+    'loggers': {
+        'crud_filters': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    }
+}
 
 # CRUD Filters settings
 CRUD_ALL_ROLES = ['test_role_1', 'test_role_2', 'test_role_3', 'test_role_4', 'test_role_5']
