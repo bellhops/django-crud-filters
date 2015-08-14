@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TestClass',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
                 ('field_one', models.BooleanField(default=False)),
                 ('field_two', models.BooleanField(default=False)),
                 ('field_three', models.BooleanField(default=False)),

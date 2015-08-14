@@ -2,7 +2,7 @@ machine:
   python:
     version: 3.4.1
   environment:
-    PATH: /home/ubuntu/django-crud-filters:/home/ubuntu/django-crud-filters/CRUDFilters:/home/ubuntu/django-crud-filters/CRUDFilters/CRUDFilters:/home/ubuntu/django-crud-filters/CRUDFilters/CRUDFilters/settings.py:$PATH
+    PATH: /home/ubuntu/django-crud-filters:/home/ubuntu/django-crud-filters/CRUDFilters:/home/ubuntu/django-crud-filters/CRUDFilters/CRUDFilters:/home/ubuntu/django-crud-filters/CRUDFilters/tests:/home/ubuntu/django-crud-filters/CRUDFilters/CRUDFilters/settings.py:$PATH
 
 dependencies:
   cache_directories:
@@ -15,5 +15,5 @@ dependencies:
 test:
   override:
   - pip freeze
-  - python testproject/manage.py migrate
-  - python testproject/manage.py test tests.tests
+  - python testproject/manage.py migrate testapp
+  - python testproject/manage.py test testapp
