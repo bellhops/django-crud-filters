@@ -321,6 +321,8 @@ class CRUDFilterIntegrationTestClass(CRUDFilterTestCase):
                             content_type=content_type,
                             **headers
                         )
+                        if not self.check_status_code_in_group(response.status_code, expected_status_code_group):
+                            import ipdb; ipdb.set_trace()
                         self.assertTrue(self.check_status_code_in_group(response.status_code, expected_status_code_group))
                         # logic check here
                         write_operation_performed = True
@@ -370,7 +372,10 @@ class CRUDFilterIntegrationTestClass(CRUDFilterTestCase):
                         # For each object, make sure we can update.
                         if hasattr(object_class, 'objects'):
                             for obj in object_class.objects.all():
-                                update_json = self.valid_creation_json.copy()
+                                if self.valid_creation_json is None:
+                                    update_json = {}
+                                else:
+                                    update_json = self.valid_creation_json.copy()
                                 update_json.update({id_name: getattr(obj, id_name)})
 
                                 patch_response = self.client.patch(
@@ -429,6 +434,7 @@ class CRUDFilterIntegrationTestClass(CRUDFilterTestCase):
 
 
 class ExampleIntegrationTests(CRUDFilterIntegrationTestClass):
+
     def setUp(self):
         username = "user@name.com"
         password = ''.join(random.choice("abcdefghijklm1234567890") for _ in range(20))
