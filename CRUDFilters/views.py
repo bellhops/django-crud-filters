@@ -3,19 +3,20 @@ import base64
 import json
 import re
 
-from django.core.urlresolvers import resolve
-from django.http import HttpResponse, HttpResponseRedirect
+from django.conf import settings
 from django.contrib.auth import authenticate, REDIRECT_FIELD_NAME, logout
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.urlresolvers import resolve, Resolver404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.template.response import TemplateResponse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.six.moves import StringIO
-from django.conf import settings
-from django.template.response import TemplateResponse
-from django.contrib.auth.models import User
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
-from django.core.urlresolvers import Resolver404
 
+from drf_cached_instances.mixins import CachedViewMixin
 from rest_framework import viewsets
 from rest_framework.parsers import FormParser
 from rest_framework.renderers import JSONRenderer
@@ -25,7 +26,6 @@ from .models import CRUDFilterModel, CRUDException
 from .serializers import AbstractModelSerializer
 from .forms import RoleForm
 from .managers import CRUDManager
-from django.contrib.sites.shortcuts import get_current_site
 
 logger = logging.getLogger('crud_filters')
 
