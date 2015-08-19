@@ -108,7 +108,7 @@ def choose_filters(request, template_name='choose_filters.html',
                             current_app=current_app)
 
 
-class CRUDFilterModelViewSet(viewsets.ModelViewSet, CachedViewMixin):
+class CRUDFilterModelViewSet(CachedViewMixin, viewsets.ModelViewSet):
     # Defaults to none, and must be set by child class
     crud_model = None
 
