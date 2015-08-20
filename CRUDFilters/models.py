@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from drf_cached_instances.models import CachedQueryset
 from .managers import CRUDManager, CRUDException
@@ -68,8 +69,8 @@ class CRUDFilterModel(models.Model):
         # UNSAFE to call this function from outside of the "get_queryset_or_false" function.
         # If this is not an abstract class, start with all objects, and filter down.
         if hasattr(cls, 'objects'):
-            if hasattr(cls, "cache_class"):
-                object_set = CachedQueryset(cls.cache_class(), queryset=cls.objects).all()
+            if hasattr(cls, "cache_class") and settings.USE_DRF_CACHE:
+                object_set = CachedQueryset(cls.cache_class(cls), queryset=cls.objects)
             else:
                 object_set = cls.objects.all()
         else:
