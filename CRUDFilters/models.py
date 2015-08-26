@@ -69,7 +69,7 @@ class CRUDFilterModel(models.Model):
         # UNSAFE to call this function from outside of the "get_queryset_or_false" function.
         # If this is not an abstract class, start with all objects, and filter down.
         if hasattr(cls, 'objects'):
-            if hasattr(cls, "cache_class") and settings.USE_DRF_CACHE:
+            if hasattr(cls, "cache_class") and hasattr(settings, "USE_DRF_INSTANCE_CACHE") and settings.USE_DRF_INSTANCE_CACHE:
                 object_set = CachedQueryset(cls.cache_class(cls), queryset=cls.objects)
             else:
                 object_set = cls.objects.all()
