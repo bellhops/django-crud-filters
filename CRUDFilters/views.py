@@ -133,6 +133,7 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
             if len(auth) == 2:
                 if auth[0].lower() == 'basic':
                     uname, colon, passwd = base64.b64decode(auth[1]).decode("utf-8").partition(':')
+                    print("Logging in with email {email}, pwd {pwd}".format(email=uname, pwd=passwd))
                     self.user = authenticate(username=uname, password=passwd)
                     if self.user is None:
                         # Credentials were provided, but they were invalid (bad username/password).
@@ -191,7 +192,7 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
             self.check_request_url_for_id(self.request)
 
         # Cursory check to make sure we have permissions on this view:
-        self.crud_model.check_for_permissions(self.request.user, self.request.crud_role, self.request.crud_operation, self.request.crud_filters)
+        self.crud_model.check_for_permissions(self.request.user, self.request.crud_role, self.request.crud_operation, self.request, self.request.crud_filters)
 
         # Retrieve (GET) operations will perform get_queryset later
         # Create (POST) operations don't need to get a queryset
