@@ -316,7 +316,7 @@ class CRUDFilterIntegrationTestClass(CRUDFilterTestCase):
                     if operation == 'C':
                         response = self.client.post(
                             base_url + url_filter_str,
-                            data=self.valid_creation_json,
+                            data=json.dumps(self.valid_creation_json),
                             content_type=content_type,
                             **headers
                         )
