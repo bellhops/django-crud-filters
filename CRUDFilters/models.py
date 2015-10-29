@@ -99,7 +99,6 @@ class CRUDFilterModel(models.Model):
         Return queryset (and make sure this item is in the queryset)
         """
         # Redundant?
-        print("Make sure request is not none here")
         cls.check_for_permissions(user, role, operation, request, filters)
         # Get our objects:
         object_set = cls.__get_objects(user, role, operation, filters, request)
