@@ -133,7 +133,6 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
             if len(auth) == 2:
                 if auth[0].lower() == 'basic':
                     uname, colon, passwd = base64.b64decode(auth[1]).decode("utf-8").partition(':')
-                    print("Logging in with email {email}, pwd {pwd}".format(email=uname, pwd=passwd))
                     self.user = authenticate(username=uname, password=passwd)
                     if self.user is None:
                         # Credentials were provided, but they were invalid (bad username/password).
