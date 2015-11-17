@@ -4,7 +4,6 @@ import random
 from PIL import Image
 from rest_framework_expiring_authtoken.models import ExpiringToken
 import tempfile
-from unittest import skip
 
 from rest_framework import HTTP_HEADER_ENCODING
 from rest_framework.test import APIClient
@@ -29,11 +28,11 @@ from .views import TestClassViewset
 test_roles = settings.CRUD_ALL_ROLES
 
 
-def default_auth_function(role, user):
+def default_auth_function(role, user, request=None):
     return True
 
 
-def always_fail_auth_function(role, user):
+def always_fail_auth_function(role, user, request=None):
     return False
 
 
@@ -67,21 +66,21 @@ class CRUDFilterModelTests(CRUDFilterTestCase):
     def test_verify_user_has_role_without_auth_function(self):
         CRUDManager.auth_function = None
         with self.assertRaises(CRUDException):
-            TestClass.verify_user_has_role(test_roles[0], 'C')
+            TestClass.verify_user_has_role(test_roles[0], 'C', None)
 
     def test_verify_user_has_role_auth_function_throws_exception(self):
         CRUDManager.auth_function = self.auth_function_throws_exception
         with self.assertRaises(CRUDException):
-            TestClass.verify_user_has_role(test_roles[0], 'C')
+            TestClass.verify_user_has_role(test_roles[0], 'C', None)
 
     def test_verify_user_has_role_auth_function_false(self):
         CRUDManager.auth_function = self.auth_function_returns_false
         with self.assertRaises(CRUDException):
-            self.assertEqual(False, TestClass.verify_user_has_role(test_roles[0], 'C'))
+            self.assertEqual(False, TestClass.verify_user_has_role(test_roles[0], 'C', None))
 
     def test_verify_user_has_role_auth_function_true(self):
         CRUDManager.auth_function = self.auth_function_returns_true
-        self.assertEqual(True, TestClass.verify_user_has_role(test_roles[0], 'C'))
+        self.assertEqual(True, TestClass.verify_user_has_role(test_roles[0], 'C', None))
 
     def test_role_can_perform_operation_with_bad_filter(self):
         with self.assertRaises(CRUDException):
@@ -317,7 +316,7 @@ class CRUDFilterIntegrationTestClass(CRUDFilterTestCase):
                     if operation == 'C':
                         response = self.client.post(
                             base_url + url_filter_str,
-                            data=self.valid_creation_json,
+                            data=json.dumps(self.valid_creation_json),
                             content_type=content_type,
                             **headers
                         )

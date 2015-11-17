@@ -46,7 +46,7 @@ def print_available_options(request):
         elif role == "admin":
             can_view_role = request.user.is_superuser
         else:
-            can_view_role = CRUDManager.auth_function(role, request.user)
+            can_view_role = CRUDManager.auth_function(role, request.user, request)
 
         if can_view_role:
             all_roles_for_user += str(allowed_methods[role].values()).replace("dict_values", "")
@@ -127,7 +127,7 @@ def print_available_options(request):
     return htmlText
 
 
-def available_roles(user):
+def available_roles(user, request):
     """
     Print the available roles for this user
     """
@@ -137,15 +137,15 @@ def available_roles(user):
             available_roles.append(role)
         elif role == "admin" and user.is_superuser:
             available_roles.append(role)
-        elif CRUDManager.auth_function(role, user):
+        elif CRUDManager.auth_function(role, user, request):
             available_roles.append(role)
     return available_roles
 
 
 @register.simple_tag
-def print_available_roles(user):
+def print_available_roles(request):
     return_string = ""
-    for role in available_roles(user):
+    for role in available_roles(request.user, request):
         return_string += "<br>    " + role + ": "
     return return_string
 
@@ -156,7 +156,7 @@ def print_roles(request, user):
     Include all roles available for this user
     """
     return_string = ""
-    for role in available_roles(user):
+    for role in available_roles(user, request):
             return_string += '<input style="width: 20%" type="radio" name="role"  value="' + role + '">' + role.title() + '<br>'
     return return_string
 

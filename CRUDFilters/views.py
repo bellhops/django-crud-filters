@@ -191,7 +191,7 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
             self.check_request_url_for_id(self.request)
 
         # Cursory check to make sure we have permissions on this view:
-        self.crud_model.check_for_permissions(self.request.user, self.request.crud_role, self.request.crud_operation, self.request.crud_filters)
+        self.crud_model.check_for_permissions(self.request.user, self.request.crud_role, self.request.crud_operation, self.request, self.request.crud_filters)
 
         # Retrieve (GET) operations will perform get_queryset later
         # Create (POST) operations don't need to get a queryset

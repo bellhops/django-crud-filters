@@ -151,7 +151,7 @@
                         <br>Filters: {{ request.crud_filters }}
                         <br><i>  Remember: set filters header as "CRUD-Filters", not "CRUD_Filters"
                         <h4>Options For This User</h4>{% print_available_options request %}
-                        <!--- <br><b><u>Available roles for this user:</u></b> <br>{% print_available_roles user %} -->
+                        <!--- <br><b><u>Available roles for this user:</u></b> <br>{% print_available_roles request %} -->
                         </pre>
                     </div>
                     <div class="response-info">

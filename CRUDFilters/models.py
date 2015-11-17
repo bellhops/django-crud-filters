@@ -8,7 +8,7 @@ class CRUDFilterModel(models.Model):
         abstract = True
 
     @classmethod
-    def verify_user_has_role(cls, user, role):
+    def verify_user_has_role(cls, user, role, request):
         """
         Call user-defined auth function to determine if this user can use this role.
         """
@@ -20,7 +20,7 @@ class CRUDFilterModel(models.Model):
         if CRUDManager.auth_function is None:
             raise CRUDException("You must define an auth_function for CRUDManagerMixin", 500)
         try:
-            value = CRUDManager.auth_function(role, user)
+            value = CRUDManager.auth_function(role, user, request)
         except Exception as exc:
             raise CRUDException("Your auth_function in CRUDManager threw an exception: " + str(exc), 500)
         if not value:
@@ -84,11 +84,11 @@ class CRUDFilterModel(models.Model):
         return object_set
 
     @classmethod
-    def check_for_permissions(cls, user, role, operation, filters=['__default']):
+    def check_for_permissions(cls, user, role, operation, request, filters=['__default']):
         """
         Make sure this role can perform this operation
         """
-        cls.verify_user_has_role(user, role)
+        cls.verify_user_has_role(user, role, request)
         for filter_str in filters:
             if not cls.role_can_perform_operation_with_filter(role, operation, filter_str):
                 raise CRUDException("Cannot perform this operation with this role.", status_code=403)
@@ -99,7 +99,7 @@ class CRUDFilterModel(models.Model):
         Return queryset (and make sure this item is in the queryset)
         """
         # Redundant?
-        cls.check_for_permissions(user, role, operation, filters)
+        cls.check_for_permissions(user, role, operation, request, filters)
         # Get our objects:
         object_set = cls.__get_objects(user, role, operation, filters, request)
 
