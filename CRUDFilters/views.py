@@ -207,8 +207,7 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
         Perform simple authentication, then check that this user can use this role
         to perform this action (on this item).
         """
-        method = self.request.method
-        if method == 'OPTIONS':
+        if request.method == 'OPTIONS':
             # TODO: tell the user what their options are here, given their desired role.
             # Do this before we do anything else to avoid unnecessary database hits, especially since we aren't generating it.
             return HttpResponse("Coming soon", status=405)
