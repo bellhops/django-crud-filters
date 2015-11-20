@@ -201,17 +201,16 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
                 logger.exception("Operation {} cannot be performed on requested object".format(self.request.crud_operation))
                 raise CRUDException("Cannot perform this operation on this object.", status_code=403)
 
+    def process_request(self, request):
+        if request.method == 'OPTIONS':
+            return HttpResponse("Coming soon", status=405)
+
     # For the time being, this only works with token and basic auth.
     def process_view(self, request, view_func, view_args, view_kwargs):
         """
         Perform simple authentication, then check that this user can use this role
         to perform this action (on this item).
         """
-        if request.method == 'OPTIONS':
-            # TODO: tell the user what their options are here, given their desired role.
-            # Do this before we do anything else to avoid unnecessary database hits, especially since we aren't generating it.
-            return HttpResponse("Coming soon", status=405)
-
         if not isinstance(view_func.cls(), CRUDFilterModelViewSet):
             return None
         # Create an instance of the ViewSet and get some variables from it.
