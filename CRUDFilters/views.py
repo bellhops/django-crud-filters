@@ -207,8 +207,12 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
         Perform simple authentication, then check that this user can use this role
         to perform this action (on this item).
         """
-        if not hasattr(view_func, 'cls'):
-            return None
+        method = self.request.method
+        if method == 'OPTIONS':
+            # TODO: tell the user what their options are here, given their desired role.
+            # Do this before we do anything else to avoid unnecessary database hits, especially since we aren't generating it.
+            return HttpResponse("Coming soon", status=405)
+
         if not isinstance(view_func.cls(), CRUDFilterModelViewSet):
             return None
         # Create an instance of the ViewSet and get some variables from it.
@@ -261,10 +265,6 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
             self.request.crud_operation = 'U'
         elif method == 'DELETE':
             self.request.crud_operation = 'D'
-        elif method == 'OPTIONS':
-            # TODO: tell the user what their options are here, given their desired role.
-            # e.g. return_options_menu_for_this_user()
-            return HttpResponse("Coming soon", status=405)
         else:
             return HttpResponse("Method not allowed", status=405)
 
