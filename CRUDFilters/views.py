@@ -211,6 +211,8 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
         Perform simple authentication, then check that this user can use this role
         to perform this action (on this item).
         """
+        if not hasattr(view_func, 'cls'):
+            return None
         if not isinstance(view_func.cls(), CRUDFilterModelViewSet):
             return None
         # Create an instance of the ViewSet and get some variables from it.
