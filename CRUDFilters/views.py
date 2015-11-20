@@ -201,6 +201,10 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
                 logger.exception("Operation {} cannot be performed on requested object".format(self.request.crud_operation))
                 raise CRUDException("Cannot perform this operation on this object.", status_code=403)
 
+    def process_request(self, request):
+        if request.method == 'OPTIONS':
+            return HttpResponse("Method 'OPTIONS' is not implemented.", status=405)
+
     # For the time being, this only works with token and basic auth.
     def process_view(self, request, view_func, view_args, view_kwargs):
         """
@@ -261,10 +265,6 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
             self.request.crud_operation = 'U'
         elif method == 'DELETE':
             self.request.crud_operation = 'D'
-        elif method == 'OPTIONS':
-            # TODO: tell the user what their options are here, given their desired role.
-            # e.g. return_options_menu_for_this_user()
-            return HttpResponse("Coming soon", status=405)
         else:
             return HttpResponse("Method not allowed", status=405)
 
