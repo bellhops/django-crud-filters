@@ -203,7 +203,7 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
 
     def process_request(self, request):
         if request.method == 'OPTIONS':
-            return HttpResponse("Coming soon", status=405)
+            return HttpResponse("Method 'OPTIONS' is not implemented.", status=405)
 
     # For the time being, this only works with token and basic auth.
     def process_view(self, request, view_func, view_args, view_kwargs):
