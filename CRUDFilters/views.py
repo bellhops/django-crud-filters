@@ -155,7 +155,12 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
                         logger.exception("User attempted to login with token auth, but their credentials were invalid. ")
                         raise CRUDException("Bad credentials", 401)
         elif '_auth_user_id' in self.request.session.keys():
-            self.user = User.objects.get(id=self.request.session['_auth_user_id'])
+            try:
+                self.user = User.objects.get(id=self.request.session['_auth_user_id'])
+            except User.DoesNotExist:
+                logger.exception("User did not present header token, and their "
+                                 "'_auth_user_id' session key was incorrectly configured. ")
+                raise CRUDException("Bad session id", 401)
 
     def _enforce_role_access_control(self):
         try:

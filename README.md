@@ -25,3 +25,13 @@ Quick start
     url(r'^crud-filters/', include('django-crud-filters.urls')),
 
 3. Run `python manage.py migrate` to create the CRUD filter models.
+
+To Build a release for pypi
+---------
+Change version number in setup.py, source the virtual environment, then run:
+```
+python setup.py sdist
+python setup.py bdist_wheel --universal
+python setup.py bdist_wheel
+twine upload dist/crud_filters-x.x.x*
+```
