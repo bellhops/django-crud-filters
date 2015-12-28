@@ -29,6 +29,7 @@ from django.contrib.sites.shortcuts import get_current_site
 
 logger = logging.getLogger('crud_filters')
 
+
 @sensitive_post_parameters()
 @csrf_protect
 @never_cache
@@ -117,6 +118,9 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
     # By default, we implement an empty serializer. If the overriding crud_model is not an abstract model,
     # the user should override this variable or provide a get_serializer() function.
     serializer_class = AbstractModelSerializer
+
+    # By default, we implement these methods, since they only rely on get_queryset for their logic:
+    allowed_default_methods = ['retrieve', 'list', 'destroy']
 
     # Allow the user to pass the "Role" header as a GET parameter (e.g. "?as_admin").
     # Insecure, and not recommended in the least.
@@ -473,46 +477,67 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
         Default empty implementation of create(). User must override this function to get
         create functionality.
         """
-        return HttpResponse("Method create not implemented by default", status=405)
+        if 'create' in self.allowed_default_methods:
+            return super().create(request, *args, **kwargs)
+        else:
+            return HttpResponse("Method create not implemented by default", status=405)
 
     def update(self, request, *args, **kwargs):
         """
         Default empty implementation of update(). User must override this function to get
         update functionality.
         """
-        return HttpResponse("Method update not implemented by default", status=405)
+        if 'update' in self.allowed_default_methods:
+            return super().update(request, *args, **kwargs)
+        else:
+            return HttpResponse("Method update not implemented by default", status=405)
 
     def partial_update(self, request, *args, **kwargs):
         """
         Default empty implementation of partial_update(). User must override this function to get
         partial_update functionality.
         """
-        return HttpResponse("Method partial_update not implemented by default", status=405)
+        if 'partial_update' in self.allowed_default_methods:
+            return super().partial_update(request, *args, **kwargs)
+        else:
+            return HttpResponse("Method partial_update not implemented by default", status=405)
 
     def patch(self, request, *args, **kwargs):
         """
         Default empty implementation of patch(). User must override this function to get
         patch functionality.
         """
-        return HttpResponse("Method patch not implemented by default", status=405)
+        if 'patch' in self.allowed_default_methods:
+            return super().patch(request, *args, **kwargs)
+        else:
+            return HttpResponse("Method patch not implemented by default", status=405)
 
     def retrieve(self, request, *args, **kwargs):
         """
         Default implementation of retrieve(). Relies on our implementation of get_queryset.
         """
         # We implement GET functions by default, since we override get_queryset.
-        return super(CRUDFilterModelViewSet, self).retrieve(request, *args, **kwargs)
+        if 'retrieve' in self.allowed_default_methods:
+            return super().retrieve(request, *args, **kwargs)
+        else:
+            return HttpResponse("Method retrieve not implemented", status=405)
 
     def list(self, request, *args, **kwargs):
         """
         Default implementation of list(). Relies on our implementation of get_queryset.
         """
         # We implement GET functions by default, since we override get_queryset.
-        return super(CRUDFilterModelViewSet, self).list(request, *args, **kwargs)
+        if 'list' in self.allowed_default_methods:
+            return super().list(request, *args, **kwargs)
+        else:
+            return HttpResponse("Method list not implemented", status=405)
 
     def destroy(self, request, *args, **kwargs):
         """
         Default implementation of delete().
         """
         # We implement DELETE by default, but still check for permissions.
-        return super(CRUDFilterModelViewSet, self).destroy(request, *args, **kwargs)
+        if 'destroy' in self.allowed_default_methods:
+            return super().destroy(request, *args, **kwargs)
+        else:
+            return HttpResponse("Method destroy not implemented", status=405)
