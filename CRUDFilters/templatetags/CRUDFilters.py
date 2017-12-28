@@ -2,9 +2,9 @@ import inspect
 import re
 
 from django import template
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import reverse, resolve, NoReverseMatch
 from django.utils.html import escape
-from django.core.urlresolvers import resolve
+from django.utils.safestring import mark_safe
 
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 
@@ -24,7 +24,7 @@ def change_role(request, user):
         return ''
 
     snippet = "<li><a href='{href}?next={next}'>Change Role</a></li>".format(href=choose_role_url, next=escape(request.path))
-    return snippet
+    return mark_safe(snippet)
 
 
 @register.simple_tag
@@ -124,7 +124,7 @@ def print_available_options(request):
         htmlLines.append(optional_string)
 
     htmlText = '\n'.join(htmlLines)
-    return htmlText
+    return mark_safe(htmlText)
 
 
 def available_roles(user, request):
@@ -147,7 +147,7 @@ def print_available_roles(request):
     return_string = ""
     for role in available_roles(request.user, request):
         return_string += "<br>    " + role + ": "
-    return return_string
+    return mark_safe(return_string)
 
 
 @register.simple_tag
@@ -158,7 +158,7 @@ def print_roles(request, user):
     return_string = ""
     for role in available_roles(user, request):
             return_string += '<input style="width: 20%" type="radio" name="role"  value="' + role + '">' + role.title() + '<br>'
-    return return_string
+    return mark_safe(return_string)
 
 
 @register.simple_tag
@@ -189,4 +189,4 @@ def print_filters(request):
         return_string = '(No filters on this view. Click "Continue.")'
     else:
         return_string += "<br> "
-    return return_string
+    return mark_safe(return_string)
