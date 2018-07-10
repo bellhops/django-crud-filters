@@ -434,7 +434,7 @@ class CRUDFilterModelViewSet(viewsets.ModelViewSet):
 
     def id_from_json(self, str_data):
         id = None
-        str_data = '{str_data}'.format(str_data=str_data.replace("'", '"'))
+
         try:
             data = json.loads(str_data)
 
